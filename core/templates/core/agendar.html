@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendar Serviço - Golden Style</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'core/css/estilo.css' %}">
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="{% url 'home' %}">✂️ Golden Style</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Início</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Meus Agendamentos</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow border-0 radius-12 p-4">
+                    <h2 class="fw-bold text-center mb-2">Confirmar Agendamento</h2>
+                    <p class="text-muted text-center mb-4">Você está agendando: <strong class="text-dark">{{ servicio.nome }}</strong></p>
+                    
+                    <div class="alert alert-info text-center py-2" role="alert">
+                        💰 <strong>Preço:</strong> R$ {{ servicio.preco }} | ⏱️ <strong>Duração:</strong> {{ servicio.duracao_minutos }} min
+                    </div>
+
+                    <form method="POST">
+                        {% csrf_token %} <div class="mb-4">
+                            <label for="data_hora" class="form-label fw-bold">Escolha o Dia e Horário:</label>
+                            <input type="datetime-local" name="data_hora" id="data_hora" class="form-control form-control-lg" required>
+                            <div class="form-text">Selecione uma data de segunda a sábado, no horário de funcionamento (08:00 às 19:00).</div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-warning btn-lg fw-bold">Confirmar Agendamento</button>
+                            <a href="{% url 'home' %}" class="btn btn-link text-muted text-decoration-none text-center">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
