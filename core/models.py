@@ -30,6 +30,10 @@ class Agendamento(models.Model):
     servico = models.ForeignKey(Servico, on_delete=models.CASCADE, verbose_name="Serviço")
     data_hora = models.DateTimeField(verbose_name="Data e Horário")
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='AGENDADO', verbose_name="Status")
+    
+    # ADICIONE ESTA LINHA EXATAMENTE AQUI:
+    visivel_para_o_cliente = models.BooleanField(default=True, verbose_name="Visível para o cliente")
+    
     data_criacao = models.DateTimeField(auto_now_add=True, verbose_name="Data do Agendamento")
 
     def __str__(self):

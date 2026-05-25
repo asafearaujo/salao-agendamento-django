@@ -28,6 +28,49 @@ def agendar(request, servico_id):
 
 @login_required
 def meus_agendamentos(request):
-    # Busca os agendamentos onde o cliente é o usuário logado, ordenando pelos mais recentes
-    agendamentos = Agendamento.objects.filter(cliente=request.user).order_by('-data_hora')
+    # ATUALIZADO: Filtra apenas os agendamentos ativos na tela do cliente
+    agendamentos = Agendamento.objects.filter(
+        cliente=request.user,
+        visivel_para_o_cliente=True
+    ).order_by('-data_hora')
     return render(request, 'core/meus_agendamentos.html', {'agendamentos': agendamentos})
+
+
+@login_required
+def cancelar_agendamento(request, agendamento_id):
+    # Busca o agendamento pelo ID, garantindo que ele pertence ao usuário logado
+    agendamento = get_object_or_404(Agendamento, id=agendamento_id, cliente=request.user)
+    
+    # Se o agendamento ainda estiver como marcado, muda para cancelado
+    if agendamento.status == 'AGENDADO':
+        agendamento.status = 'CANCELADO'
+        agendamento.save()
+        
+    # Redireciona o usuário de volta para a página de listagem
+    return redirect('meus_agendamentos')
+
+
+# ADICIONA ESTA NOVA FUNÇÃO COMPLETA NO FINAL DO ARQUIVO:
+@login_required
+def esconder_agendamento(request, agendamento_id):
+    # Busca o agendamento do cliente logado
+    agendamento = get_object_or_404(Agendamento, id=agendamento_id, cliente=request.user)
+    
+    # Modifica a flag de visibilidade para esconder da listagem do cliente
+    agendamento.visivel_para_o_cliente = False
+    agendamento.save()
+    
+    return redirect('meus_agendamentos')
+
+
+@login_required
+def limpar_historico_geral(request):
+    # Pega todos os agendamentos do usuário que NÃO estão com status 'AGENDADO'
+    # e muda a visibilidade deles para False de uma vez só
+    Agendamento.objects.filter(
+        cliente=request.user
+    ).exclude(
+        status='AGENDADO'
+    ).update(visivel_para_o_cliente=False)
+    
+    return redirect('meus_agendamentos')

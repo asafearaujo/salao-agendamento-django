@@ -23,7 +23,14 @@
     </nav>
 
     <main class="container my-5">
-        <h2 class="fw-bold mb-4">Meus Agendamentos</h2>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold m-0">Meus Agendamentos</h2>
+            <a href="{% url 'limpar_historico_geral' %}" 
+               class="btn btn-outline-secondary btn-sm fw-bold"
+               onclick="return confirm('Deseja limpar todos os agendamentos finalizados ou cancelados do seu histórico visual?');">
+                🧹 Limpar Histórico
+            </a>
+        </div>
 
         <div class="card shadow border-0 radius-12 p-4">
             <div class="table-responsive">
@@ -34,6 +41,7 @@
                             <th>Data e Horário</th>
                             <th>Preço</th>
                             <th>Status</th>
+                            <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -53,10 +61,30 @@
                                 <span class="badge bg-secondary">{{ agendamento.status }}</span>
                                 {% endif %}
                             </td>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    {% if agendamento.status == 'AGENDADO' %}
+                                        <a href="{% url 'cancelar_agendamento' agendamento.id %}" 
+                                           class="btn btn-outline-danger btn-sm fw-bold"
+                                           onclick="return confirm('Tem certeza que deseja cancelar este agendamento?');">
+                                            Cancelar
+                                        </a>
+                                    {% elif agendamento.status == 'CANCELADO' %}
+                                        <a href="{% url 'esconder_agendamento' agendamento.id %}" 
+                                           class="btn btn-light btn-sm border text-danger"
+                                           title="Remover do histórico"
+                                           onclick="return confirm('Deseja ocultar este cancelamento do seu histórico?');">
+                                            🗑️ Apagar
+                                        </a>
+                                    {% else %}
+                                        <span class="text-muted small">-</span>
+                                    {% endif %}
+                                </div>
+                            </td>
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="4" class="text-center text-muted py-4">Você ainda não possui nenhum agendamento marcado.</td>
+                            <td colspan="5" class="text-center text-muted py-4">Você ainda não possui nenhum agendamento marcado.</td>
                         </tr>
                         {% endfor %}
                     </tbody>
