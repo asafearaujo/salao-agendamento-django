@@ -1,31 +1,6 @@
-{% load static %} <!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Salão de Beleza & Estética</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <link rel="stylesheet" href="{% static 'core/css/estilo.css' %}">
-</head>
-<body class="bg-light">
+{% extends 'core/base.html' %} {% block titulo %}Salão de Beleza & Estética - Golden Style{% endblock %}
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="#">✂️ Golden Style</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link active" href="#">Início</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'meus_agendamentos' %}">Meus Agendamentos</a></li>
-                    <li class="nav-item"><a class="btn btn-outline-light btn-sm ms-2 mt-1" href="/admin">Painel Admin</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
+{% block conteudo %}
     <header class="hero-section text-center">
         <div class="container">
             <h1 class="display-4 fw-bold">Seu Estilo, Nossa Arte</h1>
@@ -48,7 +23,7 @@
                     <div class="card-footer bg-white border-0 d-flex justify-content-between align-items-center pb-3">
                         <div>
                             <span class="text-success fw-bold d-block">R$ {{ servico.preco }}</span>
-                            <small class="text-muted">⏱️ {{ servico.duracao_minutos }} min</small>
+                            <small class="text-muted"><i class="bi bi-clock"></i> {{ servico.duracao_minutos }} min</small>
                         </div>
                         <a href="{% url 'agendar' servico.id %}" class="btn btn-dark btn-sm px-3">Agendar</a>
                     </div>
@@ -62,7 +37,4 @@
 
         </div>
     </main>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+{% endblock %}
